@@ -1,0 +1,140 @@
+#!/bin/sh
+# /etc/rc.d/init.d/zeo
+# Startup script for Zope with ZEOCluster
+#
+# chkconfig: 345 80 20
+# description: Zope, a web application server
+# this works as is for a default universal plone linux install
+#
+# config: /usr/local/Plone/zeocluster/parts/client$/etc/zope.conf
+# Source function library.
+. /etc/init.d/functions
+
+RETVAL=0
+# list zeo clients in the list below
+
+# ZEOのクライアント名は client1, client2に設定。
+#（こちらも primary, secondaryなど実際のクライアント名に書き換え)
+# クライアントの起動スクリプトは、Universal Installerで作成されたスクリプトを
+# 利用します。zope.confは、このスクリプト中に指定されています。
+
+zeoclients="client1 client2"
+
+# this is for the default install path （適宜書き換え）
+clusterpath="/usr/local/Plone/zeocluster"
+prog="ZEOCluster"
+
+start() {
+    echo -n $"Starting $prog: "
+    output=`${clusterpath}/bin/zeoserver start`
+    # the return status of zopectl is not reliable, we need to parse
+    # its output via substring match
+    if echo $output | grep -q "start"; then
+            # success
+            touch /var/lock/subsys/$prog
+            success
+            echo
+            RETVAL=0
+    else
+            # failed
+            failure
+            echo
+            RETVAL=1
+    fi
+    for client in $zeoclients
+        do
+            echo -n $"Starting $client: "
+            output=`${clusterpath}/bin/${client} start`
+            # the return status of zopectl is not reliable, we need to parse
+            # its output via substring match
+            if echo $output | grep -q "start"; then
+                # success
+                touch /var/lock/subsys/zope${client}
+                success
+                echo
+                RETVAL=0
+            else
+                # failed
+                failure
+                echo
+                RETVAL=1
+            fi
+        done
+        return $RETVAL
+}
+
+stop() {
+
+for client in $zeoclients
+    do
+       echo -n $"Stopping $client: "
+       output=`${clusterpath}/bin/${client} stop`
+       # the return status of zopectl is not reliable, we need to parse
+        # its output via substring match
+        if echo $output | grep -q "stop"; then
+            # success
+            rm /var/lock/subsys/zope${client}
+            success
+            echo
+            RETVAL=0
+        else
+            # failed
+            failure
+            echo
+            RETVAL=1
+        fi
+    done
+    echo -n $"Stopping $prog: "
+    output=`${clusterpath}/bin/zeoserver stop`
+    # the return status of zopectl is not reliable, we need to parse
+    # its output via substring match
+    if echo $output | grep -q "stop"; then
+            # success
+            rm /var/lock/subsys/$prog
+            success
+            echo
+            RETVAL=0
+    else
+            # failed
+            failure
+            echo
+            RETVAL=1
+    fi
+        return $RETVAL
+}
+
+restart() {
+   stop
+   start
+}
+
+case "$1" in
+  start)
+    start
+    ;;
+  stop)
+    stop
+    ;;
+  status)
+	echo "ZEO Server:"
+	output=`${clusterpath}/bin/zeoserver status`
+	echo $output
+	for client in $zeoclients
+	do
+		echo "Zope Client" $client
+		output=`${clusterpath}/bin/${client} status`
+		echo $output
+	done
+	;;
+  restart)
+    restart
+    ;;
+  condrestart)
+    [ -e /var/lock/subsys/$prog ] && restart
+    ;;
+  *)
+    echo $"Usage: $0 {start|stop|status|restart|condrestart}"
+    RETVAL=2
+esac
+
+exit $RETVAL
