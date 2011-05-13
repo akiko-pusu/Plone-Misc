@@ -13,14 +13,14 @@
 RETVAL=0
 # list zeo clients in the list below
 
-# ZEO‚ÌƒNƒ‰ƒCƒAƒ“ƒg–¼‚Í client1, client2‚Éİ’èB
-#i‚±‚¿‚ç‚à primary, secondary‚È‚ÇÀÛ‚ÌƒNƒ‰ƒCƒAƒ“ƒg–¼‚É‘‚«Š·‚¦)
-# ƒNƒ‰ƒCƒAƒ“ƒg‚Ì‹N“®ƒXƒNƒŠƒvƒg‚ÍAUniversal Installer‚Åì¬‚³‚ê‚½ƒXƒNƒŠƒvƒg‚ğ
-# —˜—p‚µ‚Ü‚·Bzope.conf‚ÍA‚±‚ÌƒXƒNƒŠƒvƒg’†‚Éw’è‚³‚ê‚Ä‚¢‚Ü‚·B
+# ZEOã®ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆåã¯ client1, client2ã«è¨­å®šã€‚(UniversalInstallerã§ã®ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆ)
+#ï¼ˆã“ã¡ã‚‰ã‚‚ primary, secondaryãªã©å®Ÿéš›ã®ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆåã«æ›¸ãæ›ãˆ)
+# ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆã®èµ·å‹•ã‚¹ã‚¯ãƒªãƒ—ãƒˆã¯ã€Universal Installerã§ä½œæˆã•ã‚ŒãŸã‚¹ã‚¯ãƒªãƒ—ãƒˆã‚’
+# åˆ©ç”¨ã—ã¾ã™ã€‚zope.confã¯ã€ã“ã®ã‚¹ã‚¯ãƒªãƒ—ãƒˆä¸­ã«æŒ‡å®šã•ã‚Œã¦ã„ã¾ã™ã€‚
 
 zeoclients="client1 client2"
 
-# this is for the default install path i“K‹X‘‚«Š·‚¦j
+# this is for the default install path ï¼ˆé©å®œæ›¸ãæ›ãˆï¼‰
 clusterpath="/usr/local/Plone/zeocluster"
 prog="ZEOCluster"
 
